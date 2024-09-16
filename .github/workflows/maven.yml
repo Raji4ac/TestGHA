@@ -30,6 +30,6 @@ jobs:
     
     - name: Build & Push docker image
       env:
-        DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
+        DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PWD: ${{ secrets.DOCKERHUB_PWD }}
       run: mvn -B spring-boot:build-image -DskipTests
