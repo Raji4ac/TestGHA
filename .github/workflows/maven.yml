@@ -33,32 +33,3 @@ jobs:
         DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
         DOCKERHUB_PWD: ${{ secrets.DOCKERHUB_PWD }}
       run: mvn -B spring-boot:build-image -DskipTests
-
-    # Login to cluster
-    - name: Install oc
-      uses: redhat-actions/openshift-tools-installer@v1
-      with:
-        oc: "latest"
-
-    - name: Authenticate and set context
-      uses: redhat-actions/oc-login@v1
-      env:
-        # These can be stored in secrets, if desired.
-        OPENSHIFT_NAMESPACE: software-bhayya-dev
-
-      with:
-        openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
-        openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
-        # Disables SSL cert checking. Use this if you don't have the certificate authority data.
-        insecure_skip_tls_verify: true
-        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
-
-    # apply manifest files
-    - name: Deploy
-      run: |
-        oc apply -f k8s/service.yml
-        oc apply -f k8s/ingress.yml
-        oc apply -f k8s/config.yml
-        oc apply -f k8s/deployment.yml
-        oc rollout status deployment/gateway-service
-    
